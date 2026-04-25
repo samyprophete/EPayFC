@@ -1,24 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Manage profile picture</title>
-    <base href="<?= $web_root ?>">
-    <link rel="stylesheet" href="css/profile_picture.css">
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-</head>
-
-<body>
-
-<?php require_once "view/partials/_header.php"; ?>
+<?php ob_start(); ?>
 
 <div class="profile-picture-page">
 
     <!-- CURRENT -->
     <section class="card">
         <div class="card-header">Current Profile Picture</div>
-
 
         <div class="current-picture">
             <img src="<?= $currentUser->get_picture_path() ?? 'assets/avatar-default.png' ?>" alt="Profile">
@@ -59,8 +45,5 @@
 
 </div>
 
-<?php require_once "view/partials/_navbar.php"; ?>
-<?php require_once "view/partials/_timebar.php"; ?>
-
-</body>
-</html>
+<?php $content = ob_get_clean(); ?>
+<?php require "view_layout.php"; ?>

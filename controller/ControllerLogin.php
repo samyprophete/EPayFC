@@ -1,4 +1,4 @@
-<?php       
+<?php
 
 require_once "framework/Controller.php";
 require_once "framework/View.php";
@@ -12,8 +12,10 @@ class ControllerLogin extends Controller {
             $this->redirect("browser");
         }
 
-        (new View("login"))->show ([
-            "no_header_footer" => true, 
+        (new View("login"))->show([
+            "no_header_footer" => true,
+            "header_title" => "Login",
+            "page_css" => ["login.css"],
             "mail" => "",
             "errors" => []
         ]);
@@ -21,17 +23,18 @@ class ControllerLogin extends Controller {
 
     public function login(): void {
 
-          if ($this->user_logged()) {
+        if ($this->user_logged()) {
             $this->redirect("browser");
         }
 
         $mail = $_POST["mail"] ?? "";
         $password = $_POST["password"] ?? "";
-     
 
         if ($mail === "" || $password === "") {
             (new View("login"))->show([
                 "no_header_footer" => true,
+                "header_title" => "Login",
+                "page_css" => ["login.css"],
                 "mail" => $mail,
                 "errors" => ["Mail and Password are required."]
             ]);
@@ -42,6 +45,8 @@ class ControllerLogin extends Controller {
         if (!$user) {
             (new View("login"))->show([
                 "no_header_footer" => true,
+                "header_title" => "Login",
+                "page_css" => ["login.css"],
                 "mail" => $mail,
                 "errors" => ["Unknown user."]
             ]);
@@ -51,13 +56,15 @@ class ControllerLogin extends Controller {
         if (!$user->check_password($password)) {
             (new View("login"))->show([
                 "no_header_footer" => true,
+                "header_title" => "Login",
+                "page_css" => ["login.css"],
                 "mail" => $mail,
                 "errors" => ["Incorrect Pasword."]
             ]);
             return;
         }
 
-         $this->log_user($user, "browser");
+        $this->log_user($user, "browser");
         return;
     }
 
@@ -79,7 +86,7 @@ class ControllerLogin extends Controller {
                 $this->log_user($user, "browser");
             }
         }
-    
+
         $this->redirect("login");
     }
 

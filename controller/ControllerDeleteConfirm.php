@@ -8,6 +8,7 @@ class ControllerDeleteConfirm extends Controller {
 
     public function index(): void {
         $user = $this->get_user_or_redirect();
+        $encoded_state = $_GET['param2'] ?? null;
         
         $item_id = $_GET['param1'] ?? null;
         
@@ -46,7 +47,11 @@ class ControllerDeleteConfirm extends Controller {
             'item_title' => $item->get_Title(),
             'seller_full_name' => $seller->get_FullName(),
             'item_id' => $item_id,
-            'page_css' => ['delete_item.css']
+            'page_css' => ['delete_item.css'],
+            'back_url' => $encoded_state
+            ? 'open_item/index/' . $item_id . '/0/' . urlencode($encoded_state)
+            : 'open_item/index/' . $item_id,
+        'encoded_state' => $encoded_state,
         ]);
     }
     
@@ -54,6 +59,7 @@ class ControllerDeleteConfirm extends Controller {
         $user = $this->get_user_or_redirect();
         
         $item_id = $_POST['item_id'] ?? null;
+        $encoded_state = $_POST['encoded_state'] ?? null;
         
         if (!$item_id) {
             $this->redirect('my_items');
@@ -73,6 +79,12 @@ class ControllerDeleteConfirm extends Controller {
 
         $item->delete();
 
-        $this->redirect('my_items');
+        if ($encoded_state) {
+            $state = Tools::url_safe_decode($encoded_state);
+            $from = is_array($state) && isset($state['from']) ? $state['from'] : 'my_items';
+            $this->redirect($from, 'index', $encoded_state);
+        } else {
+            $this->redirect('my_items');
+        }
     }
 }

@@ -1,36 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title><?= $item_id ? "Edit item" : "Add item" ?></title>
-    <base href="<?= Configuration::get('web_root') ?>">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="css/add_edit_item.css">
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-
-<body>
+<?php ob_start(); ?>
 
 <div class="page">
 
-    <header class="top-bar">
-        <a href="my_items" class="back">
-            <i class="bi bi-arrow-left"></i>
-        </a>
-
-        <h1><?= $item_id ? "Edit item" : "Add item" ?></h1>
-
-        <button class="save-btn" form="item-form">
-            <i class="bi bi-floppy"></i>
-        </button>
-    </header>
-
+    <script>window.APP_BASE = '<?= $web_root ?>';</script>
 
     <form id="item-form"
           method="post"
           action="item/add_edit_item<?= $item_id ? "/$item_id" : "" ?>"
           data-item-id="<?= $item_id ?? '' ?>">
+        <input type="hidden" name="from" value="<?= $from ?? 'my_items' ?>">
 
         <section class="card">
             <h2>Basic Information</h2>
@@ -103,54 +81,25 @@
 
     </form>
 
-    <!--Modal exit-->
-    <div class="modal fade" id="unsaved-modal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Unsaved Changes</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Leave with unsaved changes?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Stay</button>
-                    <button type="button" class="btn btn-danger" id="unsaved-confirm-leave">Leave</button>
-                </div>
+    <div id="unsavedModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Unsaved changes</h3>
+                <button type="button" class="close-modal" id="closeUnsavedCross">
+                    <i class="bi bi-x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>You have unsaved changes. Leave anyway?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" id="cancelLeaveBtn">Cancel</button>
+                <button type="button" class="btn-confirm" id="confirmLeaveBtn">Leave</button>
             </div>
         </div>
     </div>
 
 </div>
 
-<?php include __DIR__ . "/partials/_navbar.php"; ?>
-<?php include __DIR__ . "/partials/_timebar.php"; ?>
-
-<div id="unsavedModal" class="modal-overlay" style="display: none;">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Unsaved changes</h3>
-            <button type="button" class="close-modal" id="closeUnsavedCross">
-                <i class="bi bi-x"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <p>You have unsaved changes. Leave anyway?</p>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn-cancel" id="cancelLeaveBtn">Cancel</button>
-            <button type="button" class="btn-confirm" id="confirmLeaveBtn">Leave</button>
-        </div>
-    </div>
-</div>
-
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    window.APP_BASE = '<?= Configuration::get('web_root') ?>';
-</script>
-<script src="js/item_validation.js"></script>
-
-</body>
-</html>
+<?php $content = ob_get_clean(); ?>
+<?php require "view_layout.php"; ?>

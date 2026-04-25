@@ -40,9 +40,16 @@ class ControllerItem extends Controller {
         $sold_items = Item::get_sold_items_by_owner($userid, $now);
 
         (new View("my_items"))->show([
-            "active_items" => $active_items,
+            "active_items"        => $active_items,
             "closed_unsold_items" => $closed_unsold_items,
-            "sold_items" => $sold_items
+            "sold_items"          => $sold_items,
+            "currentUser"         => $user,
+            "header_title"        => "My items",
+            "back_url"            => "browser",
+            "search_query"        => "",
+            "encoded_state"       => "",
+            "page_css"            => ["my_items.css"],
+            "page_js"             => ["search_filter.js"],
         ]);
     }
 
@@ -56,14 +63,23 @@ class ControllerItem extends Controller {
         $item_id = isset($_GET["param1"]) ? (int)$_GET["param1"] : null;
         $item = $this->load_item_for_edit_or_redirect($item_id, $owner_id);
    
+        $from = $_GET['from'] ?? $_POST['from'] ?? 'my_items';
+
         if (!empty($_POST)) {
             [$new_item, $view_data] = $this->build_item_from_post($item, $item_id, $owner_id);
 
             $errors = $new_item->persist();
             if (!empty($errors)) {
-                $view_data["errors"] = $errors;
-                $view_data["currentUser"] = $user;
-                $view_data["current_page"] = "add_item";
+                $view_data["errors"]               = $errors;
+                $view_data["currentUser"]          = $user;
+                $view_data["current_page"]         = "add_item";
+                $view_data["header_title"]         = $item_id ? "Edit item" : "Add item";
+                $view_data["back_url"]             = $from;
+                $view_data["from"]                 = $from;
+                $view_data["header_right_icon"]    = "bi-floppy";
+                $view_data["header_right_form_id"] = "item-form";
+                $view_data["page_css"]             = ["add_edit_item.css"];
+                $view_data["page_js"]              = ["item_validation.js"];
                 (new View("add_edit_item"))->show($view_data);
                 return;
             }
@@ -73,9 +89,16 @@ class ControllerItem extends Controller {
         }
 
         $view_data = $this->get_add_edit_view_data($item, $item_id);
-        $view_data["errors"] = [];
-        $view_data["currentUser"] = $user;
-        $view_data["current_page"] = "add_item";
+        $view_data["errors"]               = [];
+        $view_data["currentUser"]          = $user;
+        $view_data["current_page"]         = "add_item";
+        $view_data["header_title"]         = $item_id ? "Edit item" : "Add item";
+        $view_data["back_url"]             = $from;
+        $view_data["from"]                 = $from;
+        $view_data["header_right_icon"]    = "bi-floppy";
+        $view_data["header_right_form_id"] = "item-form";
+        $view_data["page_css"]             = ["add_edit_item.css"];
+        $view_data["page_js"]              = ["item_validation.js"];
 
         (new View("add_edit_item"))->show($view_data);
     }

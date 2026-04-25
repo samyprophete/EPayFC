@@ -19,8 +19,9 @@
         <p>This process cannot be undone.</p>
 
         <div class="action-buttons">
-            <a href="open_item/index/<?= $item_id ?>" class="btn btn-cancel">Cancel</a>
+        <a href="<?= $back_url ?? ('open_item/index/' . $item_id) ?>" class="btn btn-cancel">Cancel</a>
             <form method="post" action="delete_confirm/confirm" style="display: inline;">
+                <input type="hidden" name="encoded_state" value="<?=$encoded_state ?? '' ?>">
                 <input type="hidden" name="item_id" value="<?= $item->get_Id() ?>">
                 <button type="submit" class="btn btn-delete">Delete</button>
             </form>

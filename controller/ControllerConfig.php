@@ -5,10 +5,7 @@ require_once "framework/Configuration.php";
 
 class ControllerConfig extends Controller
 {
-    /**
-     * Service AJAX : retourne les constantes de validation au format JSON.
-     * Utilisé par les scripts JS pour ne pas hardcoder les limites côté client.
-     */
+
 
 
     public function index(): void {}

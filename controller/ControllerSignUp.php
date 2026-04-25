@@ -58,6 +58,9 @@ class ControllerSignup extends Controller
 
         (new View("signup"))->show([
             "no_header_footer" => true,
+            "header_title" => "Sign Up",
+            "page_css" => ["sign_up.css"],
+            "page_js" => ["user_validation.js"],
             "email" => $email,
             "full_name" => $full_name,
             "pseudo" => $pseudo,

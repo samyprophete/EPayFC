@@ -41,9 +41,7 @@ $(function () {
         updateBtn();
     }
 
-    function updateBtn() {
-        submitBtn.prop('disabled', Object.keys(errors).length > 0);
-    }
+    function updateBtn() {}
 
     // 3. Validations Synchrones
     function validateEmail(email) {

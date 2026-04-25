@@ -11,10 +11,11 @@ class ControllerProfilePicture extends Controller {
 
         
         (new View("profile_picture"))->show([
-            "currentUser" => $user,
+            "currentUser"  => $user,
             "header_title" => "Manage profile picture",
             "header_icon"  => "bi-person-circle",
-            "back_url"     => "profile"
+            "back_url"     => "profile",
+            "page_css"     => ["profile_picture.css"],
         ]);
 
     }

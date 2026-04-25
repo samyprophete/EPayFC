@@ -57,18 +57,23 @@ class ControllerMyItems extends Controller
             }
         }
 
+        usort($active, fn($a, $b) => strcmp($a->get_end_at(), $b->get_end_at()));
+        usort($closed_unsold, fn($a, $b) => strcmp($a->get_end_at(), $b->get_end_at()));
+        usort($sold, fn($a, $b) => strcmp($a->get_end_at(), $b->get_end_at()));
+
         // 5. Rendu de la vue
         (new View("my_items"))->show([
-            "active_items" => $active,
+            "active_items"        => $active,
             "closed_unsold_items" => $closed_unsold,
-            "sold_items" => $sold,
-            "currentUser" => $user,
-            "current_page" => "my_items",
-            "header_title" => "My items",
-            "header_subtitle" => "Items you are currently selling",
-            "back_url" => "browser",
-            "search_query" => $search_query,
-            "encoded_state" => $encoded_state
+            "sold_items"          => $sold,
+            "currentUser"         => $user,
+            "current_page"        => "my_items",
+            "header_title"        => "My items",
+            "back_url"            => "browser",
+            "search_query"        => $search_query,
+            "encoded_state"       => $encoded_state,
+            "page_css"            => ["my_items.css"],
+            "page_js"             => ["search_filter.js"],
         ]);
     }
 

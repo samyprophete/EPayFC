@@ -24,11 +24,15 @@
     <?php endforeach; ?>
 </head>
 <body>
+<?php if (!($no_header_footer ?? false)): ?>
 <?php require "partials/_header.php"; ?>
+<?php endif; ?>
 
 <?= $content ?>
 
+<?php if (!($no_header_footer ?? false)): ?>
 <?php require "partials/_navbar.php"; ?>
 <?php require "partials/_timebar.php"; ?>
+<?php endif; ?>
 </body>
 </html>

@@ -27,9 +27,13 @@ class ControllerEditProfile extends Controller
             ],
             'header_title' => 'Edit Profile',
             'header_icon' => 'bi-person-fill',
+            'back_url' => 'profile',
+            'header_right_icon' => 'bi-floppy',
+            'header_right_form_id' => 'edit-form',
             'errors' => [],
             'success' => false,
-            'page_css' => ['edit_Profile.css']
+            'page_css' => ['edit_Profile.css'],
+            'page_js' => ['user_validation.js'],
         ]);
     }
 

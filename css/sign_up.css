@@ -25,6 +25,11 @@ body {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
     text-align: center;
     box-sizing: border-box;
+    color: white;
+}
+
+.card h2 {
+    color: white;
 }
 
 .separator {
@@ -52,6 +57,7 @@ body {
     background: rgba(255, 255, 255, 0.06);
     height: 44px;
     font-size: 18px;
+    color: white;
 }
 
 .input-group input {

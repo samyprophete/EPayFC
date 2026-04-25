@@ -115,6 +115,9 @@ class ControllerBrowser extends Controller
         }
 
 
+        usort($participating_items, fn($a, $b) => strcmp($a['end_at'], $b['end_at']));
+        usort($available_items, fn($a, $b) => strcmp($a['end_at'], $b['end_at']));
+
         (new View("browser"))->show([
             'participating_items' => $participating_items,
             'available_items' => $available_items,

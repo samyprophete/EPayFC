@@ -193,6 +193,42 @@ header {
     width: 40px;
 }
 
+.header-back-spacer {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+
+.header-right-btn {
+    color: var(--Button-light-blue);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.header-right-btn span {
+    font-size: 1.2rem;
+    color: var(--Button-light-blue);
+}
+
+.header-right-btn i {
+    font-size: 1.6rem;
+}
+
+.header-right-btn:hover {
+    background-color: rgba(129, 144, 165, 0.2);
+}
+
 /* ==================== LAYOUT ==================== */
 .content-wrapper {
     display: flex;
