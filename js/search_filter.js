@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     const doc = parser.parseFromString(html, "text/html");
                     
                     // On cherche les listes d'items dans la nouvelle page et on les injecte
-                    const selectors = [".participating .item-list", ".available .item-list", ".items-section .item-list"];
+                    const selectors = [".participating .item-list", ".available .item-list", ".items-section .items-grid"];
                     selectors.forEach(selector => {
                         const listeActuelle = document.querySelector(selector);
                         const nouvelleListe = doc.querySelector(selector);

@@ -84,7 +84,13 @@ class ControllerItem extends Controller {
                 return;
             }
 
-            $this->redirect("item", "my_items");
+            if ($item_id === null) {
+                $this->redirect("my_items");
+            } else {
+                $web_root = Configuration::get("web_root");
+                header("Location: " . $web_root . ltrim($from, '/'), true, 303);
+                die();
+            }
 
         }
 
