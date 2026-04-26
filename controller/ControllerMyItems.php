@@ -16,12 +16,16 @@ class ControllerMyItems extends Controller
         $userid = $user->get_id();
         $now = AppTime::get_current_datetime();
 
-        // 1. Gestion de la recherche et de l'état
+        // 1. Gestion de la recherche et de l'état 
         $state_param = $_GET['param1'] ?? null;
         $search_query = "";
-        if ($state_param !== null && Tools::url_safe_decode($state_param)) {
+        if ($state_param !== null) {
             $state = Tools::url_safe_decode($state_param);
-            $search_query = $state['query'] ?? "";
+            if (is_array($state) && array_key_exists('query', $state)) {
+                $search_query = (string) $state['query'];
+            } else {
+                $search_query = trim($_GET['query'] ?? "");
+            }
         } else {
             $search_query = trim($_GET['query'] ?? "");
         }

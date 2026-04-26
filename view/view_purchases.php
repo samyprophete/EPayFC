@@ -73,7 +73,7 @@
                     ?>
 
                     <div class="item-card closed">
-                        <a href="open_item/index/<?= $item->get_Id() ?>/0/purchases" style="display:block;text-decoration:none;color:inherit;">
+                        <a href="open_item/index/<?= $item->get_Id() ?>/purchases/0" style="display:block;text-decoration:none;color:inherit;">
 
                         <div class="image-wrapper">
                             <img src="<?= $img ?>" alt="">

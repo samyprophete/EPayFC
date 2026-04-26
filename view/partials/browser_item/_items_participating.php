@@ -7,7 +7,7 @@
                     data-title="<?= $item['title']?? '' ?>"
                     data-seller="<?= $item['seller_pseudo']?? '' ?>"
                     data-description="<?= $item['description']?? '' ?>"> 
-                        <a href="open_item/index/<?= $item['id'] ?>/0/<?= $encoded_state ?>">
+                        <a href="open_item/index/<?= $item['id'] ?>/<?= $encoded_state ?>/0">
                             <?php if ($item['pic_path']): ?>
                                 <img src="<?= $web_root . str_replace('.jpg', '_thumbnail.jpg', $item['pic_path']) ?>" class="item-image">
                             <?php else: ?>

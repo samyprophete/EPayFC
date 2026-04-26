@@ -49,7 +49,7 @@ class ControllerDeleteConfirm extends Controller {
             'item_id' => $item_id,
             'page_css' => ['delete_item.css'],
             'back_url' => $encoded_state
-            ? 'open_item/index/' . $item_id . '/0/' . urlencode($encoded_state)
+            ? 'open_item/index/' . $item_id . '/' . urlencode($encoded_state) . '/0'
             : 'open_item/index/' . $item_id,
         'encoded_state' => $encoded_state,
         ]);

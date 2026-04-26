@@ -5,16 +5,14 @@ if (!$is_owner) return;
 <div class="owner-section">
     <h4 class="owner-section-title">Manage Your Item</h4>
     <div class="owner-actions">
-
-    <!---recuparation de l'étatat de propagation de la recherche-->
-    <?php $state_suffix = !empty($encoded_state) ? '/' . urlencode($encoded_state) : ''; ?>
+        <?php ?>
         
         <!-- Edit -->
         <?php if ($has_bids_time ||!$is_open): ?>
             <span class="btn-manage-item btn-disabled">
             <i class="bi bi-pencil"></i> Edit Item Details</span>
         <?php else: ?>
-            <a href="item/add_edit_item/<?= $item_id . $state_suffix ?>?from=open_item/index/<?= $item_id ?>/0<?= $state_suffix ?>" class="btn-manage-item">
+            <a href="item/add_edit_item/<?= $item_id . $state_suffix ?>?from=<?= urlencode($open_back) ?>" class="btn-manage-item">
             <i class="bi bi-pencil"></i> Edit Item Details
             </a>
         <?php endif; ?>

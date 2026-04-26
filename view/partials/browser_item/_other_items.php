@@ -11,7 +11,7 @@
                     data-title="<?= strtolower($item['title']) ?>"
                     data-seller="<?= strtolower($item['seller_pseudo']) ?>"
                     data-description="<?= strtolower($item['description']) ?>">
-                    <a href="open_item/index/<?= $item['id'] ?>/0/<?= $encoded_state ?>">
+                    <a href="open_item/index/<?= $item['id'] ?>/<?= $encoded_state ?>/0">
                         <?php if ($item['pic_path']): ?>
                             <?php $thumb = str_replace('.jpg', '_thumbnail.jpg', $item['pic_path']); ?>
                             <img src="<?= $web_root . $thumb ?>" class="item-image">

@@ -32,25 +32,7 @@ class ControllerItem extends Controller {
             return;
         }
 
-        $now = AppTime::get_current_datetime();
-        $userid = $user->get_id();
-
-        $active_items = Item::get_active_items_by_owner($userid, $now);
-        $closed_unsold_items = Item::get_closed_unsold_items_by_owner($userid, $now);
-        $sold_items = Item::get_sold_items_by_owner($userid, $now);
-
-        (new View("my_items"))->show([
-            "active_items"        => $active_items,
-            "closed_unsold_items" => $closed_unsold_items,
-            "sold_items"          => $sold_items,
-            "currentUser"         => $user,
-            "header_title"        => "My items",
-            "back_url"            => "browser",
-            "search_query"        => "",
-            "encoded_state"       => "",
-            "page_css"            => ["my_items.css"],
-            "page_js"             => ["search_filter.js"],
-        ]);
+        $this->redirect("my_items", "index");
     }
 
 
@@ -62,7 +44,10 @@ class ControllerItem extends Controller {
 
         $item_id = isset($_GET["param1"]) ? (int)$_GET["param1"] : null;
         $item = $this->load_item_for_edit_or_redirect($item_id, $owner_id);
-   
+
+        $p2 = $_GET['param2'] ?? $_POST['encoded_state'] ?? null;
+        $encoded_state = (is_string($p2) && $p2 !== '' && $p2 !== '0') ? $p2 : null;
+
         $from = $_GET['from'] ?? $_POST['from'] ?? 'my_items';
 
         if (!empty($_POST)) {
@@ -76,6 +61,7 @@ class ControllerItem extends Controller {
                 $view_data["header_title"]         = $item_id ? "Edit item" : "Add item";
                 $view_data["back_url"]             = $from;
                 $view_data["from"]                 = $from;
+                $view_data["encoded_state"]        = $encoded_state;
                 $view_data["header_right_icon"]    = "bi-floppy";
                 $view_data["header_right_form_id"] = "item-form";
                 $view_data["page_css"]             = ["add_edit_item.css"];
@@ -84,14 +70,21 @@ class ControllerItem extends Controller {
                 return;
             }
 
-            if ($item_id === null) {
-                $this->redirect("my_items");
-            } else {
-                $web_root = Configuration::get("web_root");
-                header("Location: " . $web_root . ltrim($from, '/'), true, 303);
-                die();
-            }
+            $is_edit = ($item_id !== null && (int) $item_id > 0);
+            $fromPost = (string) ($_POST['from'] ?? '');
 
+            if (!$is_edit) {
+                $this->redirect("my_items", "index");
+            } elseif (strpos($fromPost, "open_item") !== false) {
+                $es = trim((string) ($_POST['encoded_state'] ?? ""));
+                if ($es !== "") {
+                    $this->redirect("open_item", "index", (string) $item_id, $es, "0");
+                } else {
+                    $this->redirect("open_item", "index", (string) $item_id, "0", "0");
+                }
+            } else {
+                $this->redirect("my_items", "index");
+            }
         }
 
         $view_data = $this->get_add_edit_view_data($item, $item_id);
@@ -101,6 +94,7 @@ class ControllerItem extends Controller {
         $view_data["header_title"]         = $item_id ? "Edit item" : "Add item";
         $view_data["back_url"]             = $from;
         $view_data["from"]                 = $from;
+        $view_data["encoded_state"]        = $encoded_state;
         $view_data["header_right_icon"]    = "bi-floppy";
         $view_data["header_right_form_id"] = "item-form";
         $view_data["page_css"]             = ["add_edit_item.css"];
@@ -153,7 +147,7 @@ class ControllerItem extends Controller {
 
        
         if ($item->has_bids_time()) {
-            $this->redirect("item", "open_item", (string)$item_id);
+            $this->redirect( "open_item", "index", (string)$item_id);
         }
 
 

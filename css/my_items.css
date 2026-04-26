@@ -1,10 +1,23 @@
+:root {
+    --bg-body: #111827;
+    --bg-card: #1f2937;
+    --bg-header: #1f2937;
+    --text-main: #f3f4f6;
+    --text-muted: #9ca3af;
+    --accent-blue: #3b82f6;
+    --accent-orange: #f59e0b;
+    --accent-green: #10b981;
+    --accent-red: #ef4444;
+    --border-color: #374151;
+}
 
 body {
     margin: 0;
     font-family: "Inter", system-ui, -apple-system, sans-serif;
-    background: linear-gradient(180deg, #0b1220, #0a1020);
-    color: #e5e7eb;
+    background-color: var(--bg-body);
+    color: var(--text-main);
 }
+
 /* search bar */
 .search-bar {
     position: relative;
@@ -15,10 +28,10 @@ body {
 
 .search-input {
     width: 100%;
-    padding: 0.75rem 2.5rem 0.75rem 1rem; 
-    background-color: var(--bg-card); 
-    color: var(--text-main); 
-    border: 1px solid var(--border-color); 
+    padding: 0.75rem 2.5rem 0.75rem 1rem;
+    background-color: var(--bg-card);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     font-size: 1rem;
     outline: none;
@@ -32,7 +45,7 @@ body {
 
 .search-input:focus {
     border-color: var(--accent-blue);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); 
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 .search-icon {
@@ -41,11 +54,11 @@ body {
     top: 50%;
     transform: translateY(-50%);
     color: var(--text-muted);
-    pointer-events: none; 
+    pointer-events: none;
 }
 
 .my-items-page {
-    padding: 24px;
+    padding: 24px 24px 120px 24px;
 }
 
 
@@ -85,13 +98,13 @@ body {
     background: #1f2933;
     border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .item-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 14px 30px rgba(0,0,0,0.45);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
 }
 
 
@@ -113,7 +126,7 @@ body {
     position: absolute;
     bottom: 8px;
     right: 8px;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0, 0, 0, 0.7);
     padding: 4px 8px;
     border-radius: 8px;
     font-size: 12px;
@@ -134,15 +147,103 @@ body {
     font-weight: 500;
 }
 
-.badge.auction {
-    background: #f59e0b;
-    color: #111827;
+.item-labels {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+    flex-wrap: wrap;
+    gap: 5px;
 }
 
-.badge.buy-now {
-    top: 36px;
-    background: #3b82f6;
+.label {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.label-auction {
+    background-color: var(--accent-orange);
     color: white;
+}
+
+.label-buy-now {
+    background-color: var(--accent-blue);
+    color: white;
+}
+
+.label-direct-sale {
+    background-color: var(--accent-green);
+    color: white;
+}
+
+.label-bidder {
+    background-color: rgba(107, 114, 128, 0.9);
+    color: white;
+    backdrop-filter: blur(4px);
+}
+
+.label-highest-bidder {
+    background-color: var(--accent-green);
+    color: white;
+}
+
+.item-body {
+    padding: 15px;
+}
+
+.item-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.item-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.item-pricing {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 10px;
+}
+
+.price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent-orange);
+}
+
+.max-bid {
+    font-size: 0.9rem;
+    color: var(--accent-green);
+    text-align: right;
+}
+
+.item-time {
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 
@@ -191,4 +292,3 @@ body {
     align-items: center;
     gap: 6px;
 }
-

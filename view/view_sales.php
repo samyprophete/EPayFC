@@ -42,7 +42,7 @@
                     $closed_at = $item->get_sold_at();
                     ?>
                     <div class="sale-card">
-                        <a href="open_item/index/<?= $item->get_Id() ?>/0/sales" class="sale-card-link">
+                        <a href="open_item/index/<?= $item->get_Id() ?>/sales/0" class="sale-card-link">
                             <div class="sale-card-image">
                                 <?php if (!empty($thumb_url)): ?>
                                     <img src="<?= $thumb_url ?>" alt="">

@@ -1,5 +1,5 @@
 <div class="sale-card">
-    <a href="open_item/index/<?= (int)$card['item_id'] ?>/0/sales" class="sale-card-link">
+    <a href="open_item/index/<?= (int)$card['item_id'] ?>/sales/0" class="sale-card-link">
         <div class="sale-card-image">
             <?php if (!empty($card['thumb_url'])): ?>
                 <img src="<?= $card['thumb_url'] ?>" alt="">

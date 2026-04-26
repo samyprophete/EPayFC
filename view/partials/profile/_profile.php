@@ -9,7 +9,7 @@
         </div>
     <?php endif; ?>
     <h2 class="user-name h5 mb-0"><?= $current_user->full_name ?></h2>
-    <p class="user-pseudo text-muted mb-1 small">@<?= $current_user->pseudo ?></p>
+    <p class="user-pseudo mb-1 small">@<?= $current_user->pseudo ?></p>
     <p class="user-email text-primary small mb-0"><?= $current_user->get_email() ?></p>
 </div>
 

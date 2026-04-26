@@ -139,8 +139,8 @@ private function load_item_or_fail(): ?Item {
     
     private function get_picture_data(Item $item): array {
         $pictures = ItemPicture::get_all_by_item($item->get_Id());
-        $selected_img = isset($_GET['param2']) && $_GET['param2'] !== '' 
-            ? (int)$_GET['param2'] 
+        $selected_img = isset($_GET['param3']) && $_GET['param3'] !== ''
+            ? (int) $_GET['param3']
             : 0;
         
         if ($selected_img < 0 || (count($pictures) > 0 && $selected_img >= count($pictures))) {
@@ -204,22 +204,26 @@ private function load_item_or_fail(): ?Item {
         $status_message = $this->get_status_message($item, $context);
         
 
-            // Déterminer l'URL de retour
-        $encoded_state = $_GET['param3'] ?? null;
-        $back_url      = 'browser';   // valeur par défaut
+    
+        $param2_raw    = $_GET['param2'] ?? null;
+        $encoded_state = (is_string($param2_raw) && $param2_raw !== '' && $param2_raw !== '0')
+            ? $param2_raw
+            : null;
+        $back_url      = 'browser/index';
         $from          = 'browser';
 
-        if ($encoded_state) {
-            $state = Tools::url_safe_decode($encoded_state);
+        if ($param2_raw !== null && $param2_raw !== '' && $param2_raw !== '0') {
+            $state = Tools::url_safe_decode((string) $param2_raw);
             if (is_array($state) && isset($state['from'])) {
-                $from     = $state['from'];                            
-                $back_url = $from . '/index/' . $encoded_state;   
-    } else {
-        // Ancien format (chaîne simple : 'sales', 'my_items', etc.)
-        $from     = $encoded_state;
-        $back_url = $encoded_state;
-    }
-}
+                $from     = (string) $state['from'];
+                $back_url = $from . '/index/' . $param2_raw;
+            } else {
+                $from     = (string) $param2_raw;
+                $back_url = in_array($param2_raw, ['sales', 'purchases'], true)
+                    ? $param2_raw . '/index'
+                    : (string) $param2_raw;
+            }
+        }
 
         $is_open = $context['is_open'];
         $has_bids_time = $context['has_bids_time'];
@@ -229,6 +233,10 @@ private function load_item_or_fail(): ?Item {
         $is_direct_sale_only = $item->get_Is_Direct_Sale() && !$item->get_Is_Auction();
         $btn_class = $is_direct_sale_only ? 'btn-place-bid' : 'btn-buy-now';
         $btn_text = $is_direct_sale_only ? 'BUY NOW' : 'Buy Now at ' . format_euro($item->get_Buy_Now_Price());
+
+        $item_id      = $item->get_Id();
+        $state_suffix = !empty($encoded_state) ? '/' . urlencode($encoded_state) : '';
+        $open_back    = 'open_item/index/' . (int) $item_id . '/' . (!empty($encoded_state) ? $encoded_state : '0') . '/0';
         
 
 
@@ -277,7 +285,9 @@ private function load_item_or_fail(): ?Item {
             'buy_now_btn_class' => $btn_class,
             'buy_now_btn_text'  =>  $btn_text,
             'from' => $from ?? '',
-            'encoded_state' => $encoded_state ,
+            'encoded_state' => $encoded_state,
+            'state_suffix' => $state_suffix,
+            'open_back' => $open_back,
             'page_css' => ['open_item.css'],
             'page_js' => ['open_item.js', 'bid.js']
         ];

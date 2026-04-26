@@ -42,13 +42,21 @@ class ControllerManageImages extends Controller
             'page_js' => ['manage_images.js'],
             'encoded_state' => $encoded_state,
             'back_url' => $encoded_state
-                ? "open_item/index/$item_id/0/" . urlencode($encoded_state)
+                ? "open_item/index/$item_id/" . urlencode($encoded_state) . "/0"
                 : "open_item/index/$item_id",
                     ]);
     }
-    private function get_encoded_state(): ?string {
-        $state = $_GET['param2'] ?? $_GET['param3'] ?? $_POST['encoded_state'] ?? null;
-        return (is_string($state) && $state !== '') ? $state : null;
+    private function get_encoded_state(bool $forIndexAction = false): ?string {
+        $fromPost = $_POST['encoded_state'] ?? null;
+        if (is_string($fromPost) && $fromPost !== '') {
+            return $fromPost;
+        }
+        if ($forIndexAction) {
+            $s = $_GET['param2'] ?? null;
+        } else {
+            $s = $_GET['param3'] ?? null;
+        }
+        return (is_string($s) && $s !== '') ? $s : null;
     }
     
     private function redirect_manage_images_with_state(int|string $item_id, ?string $encoded_state): void {
@@ -72,7 +80,7 @@ class ControllerManageImages extends Controller
         if (!$item_id)
             return;
 
-        $encoded_state = $this->get_encoded_state();
+        $encoded_state = $this->get_encoded_state(false);
 
         if (!empty($_FILES['images']['name'][0])) {
             $upload_dir = 'uploads/items/'. $item_id . '/';

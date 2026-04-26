@@ -26,7 +26,7 @@ class ControllerBid extends Controller {
         $item = $this->load_item_or_redirect($params['item_id']);
         if (!$item) return;
         
-        $this->process_bid($item, $current_user, $params['amount']);
+        $this->process_bid($item, $current_user, $params['amount'], $params['encoded_state'] ?? '');
     }
     
     // ============ AUTHENTIFICATION ============
@@ -51,13 +51,23 @@ class ControllerBid extends Controller {
             $amount_str = str_replace(',', '.', $amount_str);
             $amount = (float)$amount_str;
         }
-        
-        if (!$item_id || !$amount) {
-            $this->redirect("open_item", "index", $item_id);
+        $encoded_state = trim((string) ($_POST['encoded_state'] ?? ''));
+       
+        if (!$item_id ||  $amount === null) {
+            if ($item_id) {
+                if ($encoded_state !== '') {
+                    $this->redirect("open_item", "index", (string) $item_id, $encoded_state, "0");
+                } else {
+                    $this->redirect("open_item", "index", (string) $item_id);
+                }
+            } else {
+                $this->redirect("browser");
+            }
             return null;
         }
         
-        return ['item_id' => $item_id, 'amount' => $amount];
+        
+        return ['item_id' => $item_id, 'amount' => $amount, 'encoded_state' => $encoded_state];
     }
     
     // ============ CHARGEMENT ITEM ============
@@ -65,7 +75,12 @@ class ControllerBid extends Controller {
     private function load_item_or_redirect(int $item_id): ?Item {
         $item = Item::get_by_id($item_id);
         if ($item === false) {
-            $this->redirect("open_item", "index", $item_id);
+            $es = trim((string) ($_POST['encoded_state'] ?? ''));
+            if ($es !== '') {
+                $this->redirect("open_item", "index", (string) $item_id, $es, "0");
+            } else {
+                $this->redirect("open_item", "index", (string) $item_id);
+            }
             return null;
         }
         return $item;
@@ -73,7 +88,7 @@ class ControllerBid extends Controller {
     
     // ============ TRAITEMENT ENCHÈRE ============
     
-    private function process_bid(Item $item, object $user, float $amount): void {
+    private function process_bid(Item $item, object $user, float $amount, string $encoded_state = ''): void {
 
         $bid = new Bid($item->get_Id(), $user->get_id(), $amount);
         $errors = $bid->persist($item);
@@ -93,10 +108,13 @@ class ControllerBid extends Controller {
             }
             return;
         }
-        
-        $this->redirect("open_item", "index", (string)$item->get_Id());
 
-
+        $es = $encoded_state !== '' ? $encoded_state : trim((string) ($_POST['encoded_state'] ?? ''));
+        if ($es !== '') {
+            $this->redirect("open_item", "index", (string) $item->get_Id(), $es, "0");
+        } else {
+            $this->redirect("open_item", "index", (string) $item->get_Id());
+        }
     }
 
 }
