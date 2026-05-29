@@ -268,6 +268,10 @@ public function is_open(): bool {
 
 public static function delete_by_id(int $itemId): void {
     self::execute(
+        "DELETE FROM item_categories WHERE item = :id",
+        ['id' => $itemId]
+    );
+    self::execute(
         "DELETE FROM items WHERE id = :id",
         ['id' => $itemId]
     );
