@@ -30,8 +30,13 @@ class ControllerBrowser extends Controller
         }
 
         $search_query = $initial_query;
-        $participating_items_raw = $this->get_participating_items($current_user_id, $now, $search_query, $category_id);
-        $available_items_raw = $this->get_available_items($current_user_id, $now, $search_query, $category_id);
+        if ($current_user) {
+            $participating_items_raw = $current_user->get_participating_items($now, $search_query, $category_id);
+            $available_items_raw = $current_user->get_available_items($now, $search_query, $category_id);
+        } else {
+            $participating_items_raw = Item::get_Item_Participating(-1, $now, $search_query, $category_id);
+            $available_items_raw = Item::get_Item_Available(-1, $now, $search_query, $category_id);
+        }
 
 
         $participating_items = [];
@@ -127,21 +132,4 @@ class ControllerBrowser extends Controller
 
         return $days . "d " . $hours . "h";
     }
-
-
-
-        
-    private function get_participating_items(int $user_id, string $now, string $search_query = "",  int $category_id = 0): array
-    {
-        return Item::get_Item_Participating($user_id, $now, $search_query, $category_id);
-    }
-
-    private function get_available_items(int $user_id, string $now, string $search_query = "", int $category_id = 0): array
-    {
-        return Item::get_Item_Available($user_id, $now, $search_query, $category_id);
-    }
-
-
-
 }
-?>

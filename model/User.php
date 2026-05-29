@@ -1,6 +1,7 @@
 <?php
 require_once "framework/Model.php";
 require_once "framework/Configuration.php";
+require_once "model/Item.php";
 
 class User extends Model {
 
@@ -409,6 +410,97 @@ public function get_hashed_password(): ?string {
             ]
         );
         return $query !== false;
+    }
+
+    public function get_my_items(string $search_query = "", int $category_id = 0): array
+    {
+        return Item::get_items_by_owner($this->id, $search_query, $category_id);
+    }
+
+    /**
+     * @return array{active: Item[], closed_unsold: Item[], sold: Item[]}
+     */
+    public function get_my_items_grouped(string $now, string $search_query = "", int $category_id = 0): array
+    {
+        $active = [];
+        $closed_unsold = [];
+        $sold = [];
+
+        foreach ($this->get_my_items($search_query, $category_id) as $item) {
+            if ($item->is_open()) {
+                $active[] = $item;
+            } elseif ($item->has_bids_time() && ($item->has_buy_now_reached_time() || $item->get_end_at() <= $now)) {
+                $sold[] = $item;
+            } else {
+                $closed_unsold[] = $item;
+            }
+        }
+
+        $sortByEnd = fn(Item $a, Item $b) => strcmp($a->get_end_at(), $b->get_end_at());
+        usort($active, $sortByEnd);
+        usort($closed_unsold, $sortByEnd);
+        usort($sold, $sortByEnd);
+
+        return [
+            'active' => $active,
+            'closed_unsold' => $closed_unsold,
+            'sold' => $sold,
+        ];
+    }
+
+    public function get_participating_items(string $now, string $search_query = "", int $category_id = 0): array
+    {
+        return Item::get_Item_Participating($this->id, $now, $search_query, $category_id);
+    }
+
+    public function get_available_items(string $now, string $search_query = "", int $category_id = 0): array
+    {
+        return Item::get_Item_Available($this->id, $now, $search_query, $category_id);
+    }
+
+    public function get_sold_items(string $now): array
+    {
+        return Item::get_sold_items_by_owner($this->id, $now);
+    }
+
+    public function get_sales_statistics(string $now): array
+    {
+        return Item::get_sales_statistics($this->id, $now);
+    }
+
+    public function get_purchased_items(string $now, string $search_query = ""): array
+    {
+        return Item::get_purchased_items_by_user($this->id, $now, $search_query);
+    }
+
+    /**
+     * @return array{count: int, total: float|int, average: float|int, top_seller: string|null}
+     */
+    public function get_purchases_statistics(string $now, string $search_query = ""): array
+    {
+        $items = $this->get_purchased_items($now, $search_query);
+        $total = 0;
+        $count = count($items);
+        $sellers = [];
+
+        foreach ($items as $item) {
+            $price = $item->get_max_bid_time();
+            if ($price) {
+                $total += $price;
+            }
+
+            $seller = $item->get_seller()->get_Pseudo();
+            $sellers[$seller] = ($sellers[$seller] ?? 0) + 1;
+        }
+
+        arsort($sellers);
+
+        return [
+            'count' => $count,
+            'total' => $total,
+            'average' => $count > 0 ? $total / $count : 0,
+            'top_seller' => array_key_first($sellers),
+        ];
     }
 
 

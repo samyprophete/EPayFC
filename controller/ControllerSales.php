@@ -8,12 +8,11 @@ require_once "utils/AppTime.php";
 class ControllerSales extends Controller {
 
     public function index(): void {
-        $user    = $this->get_user_or_redirect();
-        $user_id = $user->get_id();
-        $now     = AppTime::get_current_datetime();
+        $user = $this->get_user_or_redirect();
+        $now  = AppTime::get_current_datetime();
 
-        $items      = Item::get_sold_items_by_owner($user_id, $now);
-        $statistics = Item::get_sales_statistics($user_id, $now);
+        $items      = $user->get_sold_items($now);
+        $statistics = $user->get_sales_statistics($now);
 
         $stats = [
             "count"        => $statistics['sales_count'],

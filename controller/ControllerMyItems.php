@@ -14,7 +14,6 @@ class ControllerMyItems extends Controller
     public function index(): void
     {
         $user = $this->get_user_or_redirect();
-        $userid = $user->get_id();
         $now = AppTime::get_current_datetime();
 
         $search_state = (string) ($_GET['param1'] ?? '');
@@ -29,31 +28,12 @@ class ControllerMyItems extends Controller
             }
         }
 
-        $search_query = $initial_query;
-        $items = Item::get_items_by_owner($userid, $search_query, $category_id);
-
-        $active = [];
-        $closed_unsold = [];
-        $sold = [];
-
-        foreach ($items as $item) {
-            if ($item->is_open()) {
-                $active[] = $item;
-            } else if ($item->has_bids_time() && ($item->has_buy_now_reached_time() || $item->get_end_at() <= $now)) {
-                $sold[] = $item;
-            } else {
-                $closed_unsold[] = $item;
-            }
-        }
-
-        usort($active, fn($a, $b) => strcmp($a->get_end_at(), $b->get_end_at()));
-        usort($closed_unsold, fn($a, $b) => strcmp($a->get_end_at(), $b->get_end_at()));
-        usort($sold, fn($a, $b) => strcmp($a->get_end_at(), $b->get_end_at()));
+        $grouped = $user->get_my_items_grouped($now, $initial_query, $category_id);
 
         (new View("my_items"))->show([
-            "active_items"        => $active,
-            "closed_unsold_items" => $closed_unsold,
-            "sold_items"          => $sold,
+            "active_items"        => $grouped['active'],
+            "closed_unsold_items" => $grouped['closed_unsold'],
+            "sold_items"          => $grouped['sold'],
             "currentUser"         => $user,
             "current_page"        => "my_items",
             "header_title"        => "My items",
