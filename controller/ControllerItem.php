@@ -174,9 +174,9 @@ class ControllerItem extends Controller {
        
         if ($item->has_bids_time()) {
             if ($search_state) {
-                $this->redirect('open_item', 'index', (string) $item_id, $search_state, '0');
+                $this->redirect('open_item', 'index', (string) $item_id, $search_state);
             } else {
-                $this->redirect('open_item', 'index', (string) $item_id, '0', '0');
+                $this->redirect('open_item', 'index', (string) $item_id);
             }
             return null;
         }
@@ -289,9 +289,11 @@ class ControllerItem extends Controller {
     private function build_item_back_url( ?string $search_state, ?int $item_id): string{
 
       
-        if ( $item_id !== null) {
-            $es = ($search_state !== null && $search_state !== '') ? $search_state : '0';
-            return 'open_item/index/' . $item_id . '/' . rawurlencode($es) . '/0';
+        if ($item_id !== null) {
+            if ($search_state !== null && $search_state !== '') {
+                return 'open_item/index/' . $item_id . '/' . rawurlencode($search_state);
+            }
+            return 'open_item/index/' . $item_id;
         }
 
    
@@ -323,9 +325,9 @@ class ControllerItem extends Controller {
         // Edit depuis open_item
         if ($is_edit && $item_id !== null) {
             if ($es !== '') {
-                $this->redirect('open_item', 'index', (string) $item_id, $es, '0');
+                $this->redirect('open_item', 'index', (string) $item_id, $es);
             } else {
-                $this->redirect('open_item', 'index', (string) $item_id, '0', '0');
+                $this->redirect('open_item', 'index', (string) $item_id);
             }
             return;
         }

@@ -33,9 +33,9 @@ class ControllerDeleteConfirm extends Controller {
    
         if ($item->has_bids_time()) {
             if ($search_state) {
-                $this->redirect('open_item', 'index', (string)$item_id, $search_state, '0');
+                $this->redirect('open_item', 'index', (string)$item_id, $search_state);
             } else {
-                $this->redirect('open_item', 'index', (string)$item_id, '0', '0');
+                $this->redirect('open_item', 'index', (string)$item_id);
             }
             return;
         }
@@ -51,9 +51,9 @@ class ControllerDeleteConfirm extends Controller {
             'seller_full_name' => $seller->get_FullName(),
             'item_id' => $item_id,
             'page_css' => ['delete_item.css'],
-            'back_url' => $search_state 
-            ? 'open_item/index/' . $item_id . '/' . urlencode($search_state ) . '/0'
-            : 'open_item/index/' . $item_id. '/0/0',
+            'back_url' => $search_state
+            ? 'open_item/index/' . $item_id . '/' . urlencode($search_state)
+            : 'open_item/index/' . $item_id,
             'search_state' =>$search_state 
         ]);
     }

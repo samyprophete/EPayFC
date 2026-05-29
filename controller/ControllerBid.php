@@ -59,9 +59,9 @@ class ControllerBid extends Controller {
         if (!$item_id ||  $amount === null) {
             if ($item_id) {
                 if ($search_state !== '') {
-                    $this->redirect("open_item", "index", (string) $item_id, $search_state, "0");
+                    $this->redirect("open_item", "index", (string) $item_id, $search_state);
                 } else {
-                    $this->redirect("open_item", "index", (string) $item_id, "0", "0");
+                    $this->redirect("open_item", "index", (string) $item_id);
                 }
             } else {
                 $this->redirect("browser");
@@ -78,9 +78,9 @@ class ControllerBid extends Controller {
         if ($item === false) {
             $es = trim((string) ($_POST['search_state'] ?? ''));
             if ($es !== '') {
-                $this->redirect("open_item", "index", (string) $item_id, $es, "0");
+                $this->redirect("open_item", "index", (string) $item_id, $es);
             } else {
-                $this->redirect("open_item", "index", (string) $item_id, "0", "0");
+                $this->redirect("open_item", "index", (string) $item_id);
             }
             return null;
         }
@@ -100,9 +100,9 @@ class ControllerBid extends Controller {
                 return;
             }
             if ($search_state !== '') {
-                $this->redirect('open_item', 'index', (string) $item->get_Id(), $search_state, '0');
+                $this->redirect('open_item', 'index', (string) $item->get_Id(), $search_state);
             } else {
-                $this->redirect('open_item', 'index', (string) $item->get_Id(), '0', '0');
+                $this->redirect('open_item', 'index', (string) $item->get_Id());
             }
             return;
         }
@@ -124,9 +124,9 @@ class ControllerBid extends Controller {
 
             //sans Js --> redirect
         if ($search_state !== '') {
-            $this->redirect("open_item", "index", (string) $item->get_Id(), $search_state, '0');
+            $this->redirect("open_item", "index", (string) $item->get_Id(), $search_state);
         } else {
-            $this->redirect("open_item", "index", (string) $item->get_Id(), '0', '0');
+            $this->redirect("open_item", "index", (string) $item->get_Id());
         }
         return;
         

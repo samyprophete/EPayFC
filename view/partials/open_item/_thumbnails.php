@@ -4,7 +4,18 @@
 
     <div class="thumbnail-gallery">
         <?php foreach ($pictures as $index => $picture): ?>
-            <a href="open_item/index/<?= (int) $item_id ?>/<?= !empty($search_state) ? urlencode($search_state) : '0' ?>/<?= (int) $index ?>">
+            <?php
+            if (!empty($search_state)) {
+                $thumb_href = ($index === 0)
+                    ? 'open_item/index/' . (int) $item_id . '/' . urlencode($search_state)
+                    : 'open_item/index/' . (int) $item_id . '/' . urlencode($search_state) . '/' . (int) $index;
+            } else {
+                $thumb_href = ($index === 0)
+                    ? 'open_item/index/' . (int) $item_id
+                    : 'open_item/index/' . (int) $item_id . '/0/' . (int) $index;
+            }
+            ?>
+            <a href="<?= $thumb_href ?>">
                 <img class="thumbnail <?= $selected_img === $index ? 'active' : '' ?>" 
                 
                      src="<?= str_replace('.jpg', '_thumbnail.jpg', $picture->picture_path) ?>" 
