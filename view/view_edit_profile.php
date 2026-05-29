@@ -1,5 +1,7 @@
 <?php ob_start() ?>
 
+<script>window.APP_BASE = '<?= $web_root ?>';</script>
+
 <div class="edit-profile-page">
     <main>
         <?php require "partials/edit_profile/_edit_profile.php"; ?>
