@@ -60,34 +60,56 @@ class ControllerEditProfile extends Controller
         $email = $_POST['email'] ?? '';
         $iban = $_POST['iban'] ?? '';
 
-        $errors = [    'full_name' => '',
-        'pseudo' => '',
-        'email' => '',
-        'iban' => '',];
+        $errors = [
+            'full_name' => '',
+            'pseudo' => '',
+            'email' => '',
+            'iban' => '',
+        ];
 
-        if (empty(trim($full_name))) {
-            $errors['full_name'] = "Full name is required";
-        }
-        if (empty(trim($pseudo))) {
-            $errors['pseudo'] = "Username is required";
-        }
-        if (empty(trim($email))) {
-            $errors['email'] = "Email is required";
-        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors['email'] = "Invalid email format";
-        }
-         if (!empty(trim($full_name)) && User::is_full_name_taken(trim($full_name), $user_id)) {
+        $full_name = trim($full_name);
+        $pseudo = trim($pseudo);
+        $email = trim($email);
+        $iban = trim($iban);
+
+        $full_name_min = (int) Configuration::get('full_name_min_length', '3');
+        $pseudo_min = (int) Configuration::get('pseudo_min_length', '3');
+        $pseudo_max = (int) Configuration::get('pseudo_max_length', '30');
+
+        if ($full_name === '') {
+            $errors['full_name'] = "Full name is required.";
+        } elseif (mb_strlen($full_name) < $full_name_min) {
+            $errors['full_name'] = "Full name must be at least $full_name_min characters.";
+        } elseif (!preg_match('/^[\p{L} ]+$/u', $full_name)) {
+            $errors['full_name'] = "Full name can only contain letters.";
+        } elseif (User::is_full_name_taken($full_name, $user_id)) {
             $errors['full_name'] = "Full name is already taken by another user.";
         }
-        if (!empty(trim($pseudo)) && User::is_pseudo_taken(trim($pseudo), $user_id)) {
+
+        if ($pseudo === '') {
+            $errors['pseudo'] = "Username is required.";
+        } elseif (mb_strlen($pseudo) < $pseudo_min || mb_strlen($pseudo) > $pseudo_max) {
+            $errors['pseudo'] = "Username must be between $pseudo_min and $pseudo_max characters.";
+        } elseif (!preg_match('/^[\p{L}]+$/u', $pseudo)) {
+            $errors['pseudo'] = "Username can only contain letters.";
+        } elseif (User::is_pseudo_taken($pseudo, $user_id)) {
             $errors['pseudo'] = "Username is already taken by another user.";
         }
-       
-        if (!empty(trim($email)) && User::is_email_taken(trim($email), $user_id)) {
+
+        if ($email === '') {
+            $errors['email'] = "Email is required.";
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = "Invalid email format.";
+        } elseif (User::is_email_taken($email, $user_id)) {
             $errors['email'] = "Email is already used by another user.";
+        }
+
+        if ($iban !== '' && !preg_match('/^BE\d{2}( ?\d{4}){3}$/', $iban)) {
+            $errors['iban'] = "Invalid IBAN format (expected BE99 9999 9999 9999).";
         }
         if (empty(array_filter($errors))) {
             User::update_user($user_id, $full_name, $pseudo, $email, $iban);
+            $_SESSION['user'] = User::get_User_By_Id($user_id);
             $this->redirect("profile");
             return;
         }
