@@ -81,7 +81,7 @@ function time_left(?string $endAt): string
                          data-title="<?= strtolower($item->get_title() ?? '') ?>"
                          data-seller="<?= strtolower($item->get_seller()->get_Pseudo() ?? '') ?>"
                          data-description="<?= strtolower($item->get_Description() ?? '') ?>">
-                        <a href="open_item/index/<?= (int) $item->get_id() ?>/0">
+                        <a href="open_item/index/<?= (int) $item->get_id() ?>">
 
 
 
@@ -145,7 +145,7 @@ function time_left(?string $endAt): string
                     data-title="<?= strtolower($item->get_title() ?? '') ?>"
                          data-seller="<?= strtolower($item->get_seller()->get_Pseudo() ?? '') ?>"
                          data-description="<?= strtolower($item->get_Description() ?? '') ?>">
-                    <a href="open_item/index/<?= (int) $item->get_id() ?>/0">
+                    <a href="open_item/index/<?= (int) $item->get_id() ?>">
 
 
                         <div class="image-wrapper">
@@ -202,7 +202,7 @@ function time_left(?string $endAt): string
                     data-title="<?= strtolower($item->get_title() ?? '') ?>"
                          data-seller="<?= strtolower($item->get_seller()->get_Pseudo() ?? '') ?>"
                          data-description="<?= strtolower($item->get_Description() ?? '') ?>">
-                    <a href="open_item/index/<?= (int) $item->get_id() ?>/0">
+                    <a href="open_item/index/<?= (int) $item->get_id() ?>">
 
 
 

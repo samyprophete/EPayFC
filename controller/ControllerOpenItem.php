@@ -196,7 +196,7 @@ private function load_item_or_fail(): ?Item {
         $from = 'browser';
         $search_state = '';
         if ($raw_state !== '' && in_array($raw_state, $known_origins, true)) {
-            // literal origin passed in URL: /open_item/index/{id}/sales/0
+            // literal origin passed in URL: /open_item/index/{id}/sales
             $from = $raw_state;
         } elseif ($raw_state !== '') {
             // encoded state (browser/my_items search token)

@@ -107,8 +107,8 @@ document.addEventListener("DOMContentLoaded", function () {
             return baseUrl;
         }
         var itemId = parts[idx + 1];
-        // open_item/index/{id}/{search_state}/0
-        return parts.slice(0, idx + 2).concat([token, "0"]).join("/");
+        // open_item/index/{id}/{search_state}
+        return parts.slice(0, idx + 2).concat([token]).join("/");
     }
 
     function getCategoryValue() {
