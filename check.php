@@ -14,11 +14,24 @@ echo "config/dev.ini : " . ($dev_exists ? "Present" : "Absent") . "<br>";
 echo "config/prod.ini : " . ($prod_exists ? "Present" : "Absent") . "<br>";
 
 if ($prod_exists) {
+    // Afficher le contenu brut (en masquant les 4 derniers caracteres du mot de passe)
+    $raw_lines = file("config/prod.ini");
+    echo "<h4>Contenu de config/prod.ini (avec numeros de lignes) :</h4><pre style='background:#f4f4f4;padding:10px;'>";
+    foreach ($raw_lines as $num => $line) {
+        $display_line = $line;
+        if (stripos($line, 'dbpassword') !== false) {
+            $display_line = preg_replace('/(=s*["']?).*(["']?)/', '$1********$2', $line);
+        }
+        echo htmlspecialchars(($num + 1) . ": " . $display_line);
+    }
+    echo "</pre>";
+
     $ini = @parse_ini_file("config/prod.ini");
     if ($ini === false) {
-        echo "<b style='color:red'>Erreur de syntaxe dans config/prod.ini !</b><br>";
+        $err = error_get_last();
+        echo "<b style='color:red'>Erreur de syntaxe dans config/prod.ini : " . htmlspecialchars($err['message'] ?? 'Erreur de syntaxe') . "</b><br>";
     } else {
-        echo "config/prod.ini charge avec succes (" . count($ini) . " parametres)<br>";
+        echo "<b style='color:green'>config/prod.ini charge avec succes (" . count($ini) . " parametres)</b><br>";
         echo "dbhost: " . ($ini['dbhost'] ?? 'NON DEFINI') . "<br>";
         echo "dbname: " . ($ini['dbname'] ?? 'NON DEFINI') . "<br>";
         echo "dbuser: " . ($ini['dbuser'] ?? 'NON DEFINI') . "<br>";
